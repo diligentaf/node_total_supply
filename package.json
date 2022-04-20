@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "big-number": "^2.0.0",
     "web3": "^1.7.3"
   }
 }

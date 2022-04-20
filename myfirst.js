@@ -1,4 +1,5 @@
-// import * as json from './Token.json'
+
+var BigNumber = require('big-number');
 var http = require('http');
 var Web3 = require('web3');
 // const json = require('./Token.json')
@@ -8,11 +9,11 @@ var jsonFile = require('./Token.json')
 http.createServer(async function (req, res) {
   try {
     const web3 = new Web3('https://bsc-dataseed.binance.org/')
-    const temp = new web3.eth.Contract(jsonFile, address)
-    // console.log(await temp.methods.totalSupply().call())
-    // console.log(await temp.methods.symbol().call())
+    const contract = new web3.eth.Contract(jsonFile, address)
+    // console.log(await contract.methods.totalSupply().call())
+    // console.log(await contract.methods.symbol().call())
 
-    const totalSupply = await temp.methods.totalSupply().call()
+    const totalSupply = await contract.methods.totalSupply().call()
     console.log(totalSupply)
     // let sumWallet = BigInt(0);
     // let result = BigInt(0);
@@ -30,18 +31,24 @@ http.createServer(async function (req, res) {
       "0x5D5c6643B985c73Fa6aD6376Df6A6668fE677d20",
       "0xac3b9680E27F6659B01D4421189FDAA0d8e1b88e",
     ]
-    const yo = await temp.methods.balanceOf("0x61607Ae1A5cbfBb9ED87Ff2d092dfB8190BD5c14").call()
-    console.log(yo)
-    for (var i = 0; i < accounts.length; i++) {
-      const temp = await temp.methods.balanceOf(accounts[i]).call()
-      // console.log(1)
+    for (let account of accounts) {
+      let temp = await contract.methods.balanceOf(account).call()
       console.log(temp)
-      // sumWallet += temp;
+      let circulatingSupply= BigNumber(totalSupply);
+      console.log(circulatingSupply)
     }
+    // let temp = await contract.methods.balanceOf(accounts[0]).call()
+    // let temp = await contract.methods.balanceOf(accounts[0]).call()
+    // for (var i = 0; i < accounts.length; i++) {
+    //   const temp = await temp.methods.balanceOf(accounts[1]).call()
+    //   // console.log(await temp)
+    //   // console.log(1)
+    //   // sumWallet += temp;
+    // }
     // console.log(sumWallet)
-    result = totalSupply.toBigInt() - sumWallet
-    const ans = result / BigInt(1000000000000000000)
-    console.log(ans.toString())
+    // result = totalSupply.toBigInt() - sumWallet
+    // const ans = result / BigInt(1000000000000000000)
+    // console.log(ans.toString())
   } catch (error) {
     // console.log(error);
   }
